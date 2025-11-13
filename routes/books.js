@@ -6,9 +6,26 @@ router.get('/search',function(req, res, next){
     res.render("search.ejs")
 });
 
-router.get('/search-result', function (req, res, next) {
-    //searching in the database
-    res.send("You searched for: " + req.query.keyword)
+router.get('/search_result', function (req, res, next) {
+    
+    // Extract the user's search term from the query string
+    let searchTerm = req.query.keyword;
+
+    // SQL query using a wildcard match to support partial searches
+    let sqlquery = "SELECT * FROM books WHERE name LIKE ?";
+    
+    // Wrap the search term in '%' so SQL finds any titles containing it
+    let searchWildcard = "%" + searchTerm + "%";
+
+    // Run the database query
+    db.query(sqlquery, [searchWildcard], (err, result) => {
+        if (err) {
+            next(err);      // Pass any errors to Express error handler
+        } else {
+            // Render the results page with the list of matching books
+            res.render("search_result.ejs", {searchResults: result, searchTerm: searchTerm});
+        }
+    });
 });
 
 // Display all books in a list, rendered through template "list.ejs"

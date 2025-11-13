@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Search Results</title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+
+    <h1>Search Results for "<%= searchTerm %>"</h1>
+
+    <% if (searchResults.length === 0) { %>
+        <p>No books found.</p>
+    <% } else { %>
+        <ul>
+          <% searchResults.forEach(function(book) { %>
+              <li><%= book.name %>, £<%= book.price %></li>
+          <% }) %>
+        </ul>
+    <% } %>
+
+  </body>
+</html>
