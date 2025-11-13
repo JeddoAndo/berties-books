@@ -24,6 +24,18 @@ router.get('/list', function (req, res, next) {
     });
 });
 
+// Bargain books GET route
+router.get('/bargainbooks', function(req, res, next) {
+    let sqlquery = "SELECT * FROM books WHERE price < 20";
+
+    db.query(sqlquery, (err, result) => {
+        if (err) {
+            next(err);
+        }
+        res.render('bargainbooks.ejs', {bargainList:result});
+    });
+});
+
 // Redirect the user to '/bookadded' page, save the data in database and display message.
 router.post('/bookadded', function (req, res, next) {
     // saving data in database
