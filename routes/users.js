@@ -9,6 +9,11 @@ router.get('/register', function (req, res, next) {
     res.render('register.ejs')
 })
 
+// Display login form
+router.get('/login', function(req, res, next) {
+    res.render('login.ejs');
+});
+
 // Handle registration form submission
 router.post('/registered', function (req, res, next) {
 
@@ -58,6 +63,50 @@ router.get('/list', function (req, res, next) {
             next(err);
         } else {
             res.render("listusers.ejs", { userList: result });
+        }
+    });
+});
+
+// Handle login form submission
+router.post('/loggedin', function(req, res, next) {
+
+    let username = req.body.username;
+    let password = req.body.password;
+
+    // Retriee the hashed password for this username
+    let sqlquery = "SELECT hashedPassword FROM users WHERE username = ?";
+
+    db.query(sqlquery, [username], (err, result) => {
+        if (err) {
+            next(err);
+        }
+
+        // If no user found -> login fails
+        else if (result.length === 0) {
+            res.send("Login failed: user not found.");
+        }
+
+        // If user found -> extract hashedPassword
+        else {
+            let hashedPassword = result[0].hashedPassword;
+
+            // Compare typed password with stored hashed password
+            bcrypt.compare(password,hashedPassword, function(err, match) {
+
+                if (err) {
+                    next(err);
+                }
+
+                // match === true -> login access
+                else if (match === true) {
+                    res.send("Login successful! Welcome, " + username + ".");
+                }
+
+                // match === false -> incorrect password
+                else {
+                    res.send("Login failed: incorrect password.");
+                }
+            });
         }
     });
 });
