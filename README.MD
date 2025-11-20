@@ -33,3 +33,16 @@ node index.js
 To improve security and tracebility, the application records every login attempt in an `audit` table. Each entry store the username, whether the attempt was successful, and the timestamp of the attempt.
 
 The `/users/loggedin` route was updated to insert an audit entry after every login operation (both successful and failed). A new route `/users/audit`, displays the full audit history by querying the audit table and rendering the results in `audit.ejs`
+
+---
+
+### Routes
+`/books/list`
+`/books/addbook`
+`/books/bargainbooks`
+`/books/search`
+`/users/register`
+`/users/list`
+`/users/login`
+`/users/loggedin`
+`/users/audit`
