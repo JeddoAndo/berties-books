@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audit Log</title>
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+</head>
+<body>
+
+    <h1>Audit Log</h1>
+
+    <ul>
+    <% auditList.forEach(function(entry) { %>
+        <li>
+            Username: <strong><%= entry.username %></strong><br>
+            Success: <%= entry.success ? "Yes" : "No" %><br>
+            Time: <%= entry.timestamp %>
+        </li>
+        <br>
+    <% }) %>
+    </ul>
+
+</body>
+</html>

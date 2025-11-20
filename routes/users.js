@@ -83,6 +83,9 @@ router.post('/loggedin', function(req, res, next) {
 
         // If no user found -> login fails
         else if (result.length === 0) {
+            let auditQuery = "INSERT INTO audit (username, success) VALUES (?, ?)";
+            db.query(auditQuery, [username, false]);
+
             res.send("Login failed: user not found.");
         }
 
@@ -99,14 +102,33 @@ router.post('/loggedin', function(req, res, next) {
 
                 // match === true -> login access
                 else if (match === true) {
+
+                    let auditQuery = "INSERT INTO audit (username, success) VALUE (?, ?)";
+                    db.query(auditQuery, [username, true]);
                     res.send("Login successful! Welcome, " + username + ".");
                 }
 
                 // match === false -> incorrect password
                 else {
+                    let auditQuery = "INSERT INTO audit (username, success) VALUES (?, ?)";
+                    db.query(auditQuery, [username, false]);
                     res.send("Login failed: incorrect password.");
                 }
             });
+        }
+    });
+});
+
+// Show audit log
+router.get('/audit', function(req, res, next) {
+
+    let sqlquery = "SELECT * FROM audit ORDER BY timestamp DESC";
+
+    db.query(sqlquery, (err, result) => {
+        if (err) {
+            next(err);
+        } else {
+            res.render("audit.ejs", {auditList: result});
         }
     });
 });
