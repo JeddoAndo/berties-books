@@ -82,7 +82,7 @@ router.post('/loggedin', function(req, res, next) {
     let username = req.body.username;
     let password = req.body.password;
 
-    // Retriee the hashed password for this username
+    // Retrieve the hashed password for this username
     let sqlquery = "SELECT hashedPassword FROM users WHERE username = ?";
 
     db.query(sqlquery, [username], (err, result) => {
