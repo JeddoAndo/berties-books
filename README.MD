@@ -71,3 +71,7 @@ This ensures only logged-in users can access or modify book and user data.
 I added express-sanitizer to remove potentially dangerous HTML/Javascript from user input fields. Only the username, first name, and last name fields were sanitised, because these are displayed in the HTML output and could be used for XSS attacks.
 
 I did not sanitise the password or email fields. Passwords must remain unchanged to allow correct hashing, and sanitising emails can corrupt valid characters such as '@' and '.'.
+
+### Additional sanitisation
+
+I extendd sanitisation to other user input fields throughout the application to prevent cross-site scripting (XSS) attacks. This included sanitising the username during login, the book name on the add book page, and the search query on the search page. I did not sanitise passwords or emails, as this could corrupt valid input or break password hashing.

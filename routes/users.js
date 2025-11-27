@@ -97,7 +97,7 @@ router.get('/list', redirectlogin, function (req, res, next) {
 // Handle login form submission
 router.post('/loggedin', function(req, res, next) {
 
-    let username = req.body.username;
+    let username = req.sanitize(req.body.username); // sanitised
     let password = req.body.password;
 
     // Retrieve the hashed password for this username
