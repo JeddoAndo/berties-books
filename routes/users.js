@@ -41,6 +41,11 @@ router.post(
 
     const plainPassword = req.body.password;    // password from the form
 
+    // SANITISE FIELDS
+    let username = req.sanitize(req.body.username);
+    let first = req.sanitize(req.body.first);
+    let last = req.sanitize(req.body.last);
+
     // Hash the password before storing it
     bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
         if (err) {
@@ -51,10 +56,10 @@ router.post(
         let sqlquery = "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)";
 
         let newrecord = [
-            req.body.username,
-            req.body.first,
-            req.body.last,
-            req.body.email,
+            username,
+            first,
+            last,
+            req.body.email, // email NOT sanitized
             hashedPassword
         ];
 

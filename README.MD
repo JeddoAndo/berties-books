@@ -63,3 +63,11 @@ Public routes include:
 - `/users/login`, `/users/loggedin`
 
 This ensures only logged-in users can access or modify book and user data.
+
+---
+
+### Sanitisation
+
+I added express-sanitizer to remove potentially dangerous HTML/Javascript from user input fields. Only the username, first name, and last name fields were sanitised, because these are displayed in the HTML output and could be used for XSS attacks.
+
+I did not sanitise the password or email fields. Passwords must remain unchanged to allow correct hashing, and sanitising emails can corrupt valid characters such as '@' and '.'.
