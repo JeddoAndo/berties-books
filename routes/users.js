@@ -5,6 +5,15 @@ const bcrypt = require("bcrypt");
 
 const saltRounds = 10;
 
+// Redirect middleware
+const redirectlogin = (req, res, next) => {
+    if (!req.session.userId) {
+        res.redirect('./login'); // redirect to login page
+    } else {
+        next();
+    }
+};
+
 router.get('/register', function (req, res, next) {
     res.render('register.ejs')
 })
@@ -54,7 +63,7 @@ router.post('/registered', function (req, res, next) {
 }); 
 
 // List all registered users (without passwords)
-router.get('/list', function (req, res, next) {
+router.get('/list', redirectlogin, function (req, res, next) {
 
     let sqlquery = "SELECT username, first, last, email FROM users";
 
@@ -102,6 +111,9 @@ router.post('/loggedin', function(req, res, next) {
 
                 // match === true -> login access
                 else if (match === true) {
+
+                    // Save session here when login is successful
+                    req.session.userId = req.body.username;
 
                     let auditQuery = "INSERT INTO audit (username, success) VALUE (?, ?)";
                     db.query(auditQuery, [username, true]);
