@@ -46,3 +46,20 @@ The `/users/loggedin` route was updated to insert an audit entry after every log
 `/users/login`
 `/users/loggedin`
 `/users/audit`
+
+---
+
+### Access Control
+Access control was implemented using a custom `redirectlogin` middleware function. Protectd routes check for the presence of `req.session.userId` and redirect unauthenticated users to the login page.
+
+Protected routes include:
+- `/users/list`
+- `/users/audit`
+- All `/books/*` routes (list, addbook, bargainbooks, search, etc,.)
+
+Public routes include:
+- Homepage (`/`), About page
+- `/users/register`, `/users/registered`
+- `/users/login`, `/users/loggedin`
+
+This ensures only logged-in users can access or modify book and user data.

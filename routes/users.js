@@ -132,7 +132,7 @@ router.post('/loggedin', function(req, res, next) {
 });
 
 // Show audit log
-router.get('/audit', function(req, res, next) {
+router.get('/audit', redirectlogin, function(req, res, next) {
 
     let sqlquery = "SELECT * FROM audit ORDER BY timestamp DESC";
 

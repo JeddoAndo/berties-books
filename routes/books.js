@@ -2,11 +2,19 @@
 const express = require("express")
 const router = express.Router()
 
-router.get('/search',function(req, res, next){
+const redirectlogin = (req, res, next) => {
+    if (!req.session.userId) {
+        res.redirect('/users/login'); // send non-logged-in users to login page
+    } else {
+        next();
+    }
+};
+
+router.get('/search', redirectlogin, function (req, res, next){
     res.render("search.ejs")
 });
 
-router.get('/search_result', function (req, res, next) {
+router.get('/search_result', redirectlogin, function (req, res, next) {
     
     // Extract the user's search term from the query string
     let searchTerm = req.query.keyword;
@@ -29,7 +37,7 @@ router.get('/search_result', function (req, res, next) {
 });
 
 // Display all books in a list, rendered through template "list.ejs"
-router.get('/list', function (req, res, next) {
+router.get('/list', redirectlogin, function (req, res, next) {
     let sqlquery = "SELECT * FROM books"; // query database to get all the books
 
     // execute sql query
@@ -42,7 +50,7 @@ router.get('/list', function (req, res, next) {
 });
 
 // Bargain books GET route
-router.get('/bargainbooks', function(req, res, next) {
+router.get('/bargainbooks', redirectlogin, function(req, res, next) {
     let sqlquery = "SELECT * FROM books WHERE price < 20";
 
     db.query(sqlquery, (err, result) => {
@@ -54,7 +62,7 @@ router.get('/bargainbooks', function(req, res, next) {
 });
 
 // Redirect the user to '/bookadded' page, save the data in database and display message.
-router.post('/bookadded', function (req, res, next) {
+router.post('/bookadded', redirectlogin, function (req, res, next) {
     // saving data in database
     let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)"
     // execute sql query
