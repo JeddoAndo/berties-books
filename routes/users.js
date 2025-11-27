@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const { check, validationResult } = require('express-validator');
 
 const saltRounds = 10;
 
@@ -24,7 +25,19 @@ router.get('/login', function(req, res, next) {
 });
 
 // Handle registration form submission
-router.post('/registered', function (req, res, next) {
+router.post(
+    '/registered', 
+    [
+        check('email').isEmail(),                     // validate email
+        check('username').isLength({min: 5, max: 20}), // validate username length
+        check('password').isLength({ min: 8})
+    ],
+    function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.render('./register'); // if validation fails
+        }
+        else {
 
     const plainPassword = req.body.password;    // password from the form
 
@@ -60,7 +73,7 @@ router.post('/registered', function (req, res, next) {
             }
         });
     });                                                           
-}); 
+}}); 
 
 // List all registered users (without passwords)
 router.get('/list', redirectlogin, function (req, res, next) {
