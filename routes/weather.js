@@ -23,12 +23,8 @@ router.get('/result', function(req, res, next) {
                 return res.send(`City "${city}" not found.`);
             }
 
-            var wmsg = "It is " + weather.main.temp +
-                " degrees in " + weather.name +
-                "! <br> The humidity now is: " +
-                weather.main.humidity;
-
-            res.send(wmsg);
+            // Render the EJS template and pass the weather data
+            res.render("weather_result.ejs", {weather: weather });
         }
     });
 });
