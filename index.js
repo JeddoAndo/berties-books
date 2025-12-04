@@ -12,6 +12,7 @@ const expressSanitizer = require('express-sanitizer');
 const app = express()
 const port = 8000
 
+
 // Tell Express that we want to use EJS as the templating engine
 app.set('view engine', 'ejs')
 
@@ -59,6 +60,10 @@ app.use('/users', usersRoutes)
 // Load the route handlers for /books
 const booksRoutes = require('./routes/books')
 app.use('/books', booksRoutes)
+
+// Load the route handlers for /weather
+const weatherRoutes = require('./routes/weather');
+app.use('/weather', weatherRoutes);
 
 // Start the web app listening
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

@@ -6,7 +6,7 @@ const request = require("request");
 // GET /weather
 router.get('/', function(req, res, next) {
 
-    let apiKey = "f529c39c328239f6f2f7bd76fb3c87cd"
+    let apiKey = process.env.WEATHER_API_KEY; // <--- Safer than hardcoding
     let city = "london";
     let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
 
@@ -18,3 +18,5 @@ router.get('/', function(req, res, next) {
         }
     });
 });
+
+module.exports = router;
