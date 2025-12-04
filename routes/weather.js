@@ -12,13 +12,22 @@ router.get('/result', function(req, res, next) {
 
     request(url, function (err, response, body) {
         if(err){
-            next(err)
+            return res.send("Error contacting weather service.");
         } else {
-            // res.send(body);
 
-            var weather = JSON.parse(body);
+            // Safely parse JSON
+            try {
+                weather = JSON.parse(body);
+            } catch (e) {
+                return res.send("Weather data is not valid JSON.");
+            }
 
-            // Handle invalid cities
+            // Check valid weather structure
+            if (!weather || !weather.main) {
+                return res.send("No data found.");
+            }
+
+            // Check for API error (e.g., city not found)
             if (weather.cod === "404") {
                 return res.send(`City "${city}" not found.`);
             }
